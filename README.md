@@ -1,6 +1,6 @@
 ## Terraform Template for VMware Solutions Shared
 
-Use this template to configure and provision virtual machines inside of an IBM Cloud for VMWare Solutions Shared environment.  This template is the repository used in the [Getting Started with IBM Cloud for VMWare Solutions Shared](https://cloud.ibm.com/docs/tutorials?topic=solution-tutorials-vmware-solutions-shared-getting-started) tutorial.
+Use this template to configure and provision virtual machines inside of an IBM Cloud for VMWare Solutions Shared environment.  This template is the repository used in the [Getting Started with IBM Cloud for VMWare Solutions Shared](https://cloud.ibm.com/docs/solution-tutorials?topic=solution-tutorials-vmware-solutions-shared-getting-started) tutorial.
 
 ![](./docs/diagrams/Architecture.png)
 
