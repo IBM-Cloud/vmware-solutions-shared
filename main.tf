@@ -56,7 +56,7 @@ resource "vcd_nsxv_firewall_rule" "rule_internet" {
 resource "vcd_nsxv_snat" "rule_internet" {
   edge_gateway = module.ibm_vmware_solutions_shared_instance.edge_gateway_name
   network_type = "ext"
-  network_name = module.ibm_vmware_solutions_shared_instance.default_gateway_network
+  network_name = module.ibm_vmware_solutions_shared_instance.external_network_name_2
 
   original_address   = "${vcd_network_routed.tutorial_network.gateway}/24"
   translated_address = module.ibm_vmware_solutions_shared_instance.default_external_network_ip
@@ -64,7 +64,7 @@ resource "vcd_nsxv_snat" "rule_internet" {
 
 # Create the firewall rule to allow SSH from the Internet
 resource "vcd_nsxv_firewall_rule" "rule_internet_ssh" {
-  count = var.allow_ssh == true ? 1 :0
+  count = tobool(var.allow_ssh) == true ? 1 :0
 
   edge_gateway = module.ibm_vmware_solutions_shared_instance.edge_gateway_name
   name         = "${vcd_network_routed.tutorial_network.name}-Internet-SSH"
@@ -87,11 +87,11 @@ resource "vcd_nsxv_firewall_rule" "rule_internet_ssh" {
 
 # Create DNAT rule to allow SSH from the Internet
 resource "vcd_nsxv_dnat" "rule_internet_ssh" {
-  count = var.allow_ssh == true ? 1 :0
+  count = tobool(var.allow_ssh) == true ? 1 :0
 
   edge_gateway = module.ibm_vmware_solutions_shared_instance.edge_gateway_name
   network_type = "ext"
-  network_name = module.ibm_vmware_solutions_shared_instance.default_gateway_network
+  network_name = module.ibm_vmware_solutions_shared_instance.external_network_name_2
 
   original_address = module.ibm_vmware_solutions_shared_instance.default_external_network_ip
   original_port    = 22
@@ -114,7 +114,7 @@ resource "vcd_nsxv_firewall_rule" "rule_ibm_private" {
   }
 
   destination {
-    gateway_interfaces = [module.ibm_vmware_solutions_shared_instance.external_networks_2]
+    gateway_interfaces = [module.ibm_vmware_solutions_shared_instance.external_network_name_1]
   }
 
   service {
@@ -126,7 +126,7 @@ resource "vcd_nsxv_firewall_rule" "rule_ibm_private" {
 resource "vcd_nsxv_snat" "rule_ibm_private" {
   edge_gateway = module.ibm_vmware_solutions_shared_instance.edge_gateway_name
   network_type = "ext"
-  network_name = module.ibm_vmware_solutions_shared_instance.external_networks_2
+  network_name = module.ibm_vmware_solutions_shared_instance.external_network_name_1
 
   original_address   = "${vcd_network_routed.tutorial_network.gateway}/24"
   translated_address = module.ibm_vmware_solutions_shared_instance.external_network_ips_2
@@ -161,5 +161,9 @@ resource "vcd_vapp_vm" "vm_1" {
     name               = vcd_vapp_org_network.tutorial_network.org_network_name
     ip_allocation_mode = "POOL"
     is_primary         = true
+  }
+
+  customization {
+    auto_generate_password     = true
   }
 }
