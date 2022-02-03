@@ -164,6 +164,7 @@ resource "vcd_vapp_vm" "vm_1" {
   }
 
   customization {
-    auto_generate_password     = true
+    auto_generate_password     = false
+    admin_password             = "test"
   }
 }
