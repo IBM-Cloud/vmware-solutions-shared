@@ -1,9 +1,9 @@
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.1.8"
   required_providers {
     vcd = {
       source = "vmware/vcd"
-      version = ">= 3.1.0"
+      version = ">= 3.6.0"
     }
   }
 }
